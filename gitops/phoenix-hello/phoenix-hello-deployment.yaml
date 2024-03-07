@@ -20,6 +20,9 @@ spec:
         name: phoenix-hello
         ports:
         - containerPort: 4000
+        envFrom:
+        - configMapRef:
+            name: phoenix-hello-configmap
         env:
         - name: PHX_HOST
           value: "localhost"
