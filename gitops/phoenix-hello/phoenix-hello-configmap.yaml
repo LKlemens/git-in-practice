@@ -3,4 +3,4 @@ kind: ConfigMap
 metadata:
   name: phoenix-hello-configmap
 data:
-  HELLO_NAME_TO_GREET: "John"
+  HELLO_NAME_TO_GREET: "Jane"
