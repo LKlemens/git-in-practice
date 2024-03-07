@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phoenix-hello
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: phoenix-hello
+  template:
+    metadata:
+      labels:
+        app: phoenix-hello
+    spec:
+      containers:
+      - image: docker.io/erszcz/phoenix-hello:2024-03-07
+        name: phoenix-hello
+        ports:
+        - containerPort: 4000
+        env:
+        - name: PHX_HOST
+          value: "localhost"
+        - name: PORT
+          value: "4000"
+        - name: DATABASE_URL
+          value: "fakeuser:fakepass@fakehost/fakedb"
+        - name: SECRET_KEY_BASE
+          value: "bN8L6EuEkLF2k6XamdUGsSQlUzo5XQnc0hpJs85q+Ze1InR0UTKMq5XDSklgabl2"
