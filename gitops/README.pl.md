@@ -22,15 +22,15 @@ Spodziewamy się kontekstu `docker-desktop` lub `rancher-desktop`.
 W innym wypadku sprawdźmy listę dostępnych kontekstów:
 
 ```sh
-$ kubectl config get-contexts
-CURRENT   NAME              CLUSTER             AUTHINFO            NAMESPACE
-...       ...               ...                 ...                 ...
-*         docker-desktop    docker-desktop      docker-desktop
+$ kubectl config get-contexts -o name
+...
+docker-desktop
 ```
 
 Jeśli `docker-desktop` lub `rancher-desktop` nie są widoczne,
 to sprawdźmy poprawność instalacji i konfiguracji Docker Desktop lub Rancher Desktop.
-Jeśli pożądany kontekst jest dostępny, to ustawmy go jako domyślny:
+
+Jeśli oczekiwany kontekst jest dostępny, to ustawmy go jako domyślny:
 
 ```sh
 $ kubectl config use-context docker-desktop
@@ -94,7 +94,7 @@ kubectl create namespace argocd
 kubectl apply -n argocd -f argocd-install.yaml
 ```
 
-Terminal z podglądem powinien pokazać nam szereg prawidłowo zainstalowanych zasobów:
+Terminal z podglądem powinien po chwili pokazać nam szereg prawidłowo zainstalowanych zasobów:
 
 ```sh
 Every 2.0s: kubectl -n argocd get all                                                        x7.local: Fri Mar  8 16:12:13 2024
@@ -139,7 +139,7 @@ statefulset.apps/argocd-application-controller   1/1     3m37s
 ```
 
 
-## Instalacja aplikacji linii poleceń
+### Instalacja aplikacji linii poleceń
 
 Na platformie Mac klienta linii poleceń zainstalujemy przez:
 
@@ -179,6 +179,70 @@ asdf local argocd 2.10.2
 
 [Instalacja klienta linii poleceń ArgoCD](https://argo-cd.readthedocs.io/en/stable/cli_installation/)
 zawiera bardziej szczegółowe wskazówki dla innych platform i konfiguracji.
+
+
+### Dostęp do API aplikacji ArgoCD i konfiguracja
+
+Sieć wewnętrzna klastra Kubernetesa domyślnie jest kompletnie izolowana od
+sieci hosta, na którym działa klaster. My jednak chcemy aby nasz konsolowy
+klient ArgoCD mógł łączyć się z ArgoCD zainstalowanym w klastrze.
+W tym celu musimy ustawić tzw. _port forwarding_ pomiędzy siecią hosta i
+aplikację w klastrze - najlepiej w osobnej konsoli:
+
+```sh
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+```
+
+Po tej operacji powinniśmy móc otworzyć adres `https://localhost:8080` w
+przeglądarce internetowej (może pojawić się ostrzeżenie o nieprawidłowym
+certyfikacie), zobaczyć ekran logowania i powitalne hasło:
+
+> Let's get stuff deployed!
+
+Zanim będziemy mogli korzystać z ArgoCD musimy się zalogować.
+Pobierzmy losowo wygenerowane przy instalacji ArgoCD tymczasowe hasło:
+
+```sh
+$ argocd admin initial-password -n argocd
+
+****************
+
+ This password must be only used for first time login. We strongly recommend you update the password using `argocd account update-password`.
+```
+
+Zalogujmy się za jego pomocą:
+
+```sh
+$ argocd login localhost:8080
+WARNING: server certificate had error: tls: failed to verify certificate: x509: certificate signed by unknown authority. Proceed insecurely (y/n)? y
+Username: admin
+Password:
+'admin:login' logged in successfully
+Context 'localhost:8080' updated
+```
+
+Zmieńmy hasło - w praktyce dla bezpieczeństwa instalacji, tutaj dla wygody na `1234qwer`:
+
+```sh
+$ argocd account update-password
+*** Enter password of currently logged in user (admin): ****************
+*** Enter new password for user admin: 1234qwer
+*** Confirm new password for user admin: 1234qwer
+Password updated
+Context 'localhost:8080' updated
+```
+
+Dodajmy klaster Kubernetesa do klastrów zarządzanych przez naszą
+instalację ArgoCD:
+
+```sh
+$ argocd cluster add docker-desktop --in-cluster
+WARNING: This will create a service account `argocd-manager` on the cluster referenced by context `docker-desktop` with full cluster level privileges. Do you want to continue [y/N]? y
+INFO[0001] ServiceAccount "argocd-manager" already exists in namespace "kube-system"
+INFO[0001] ClusterRole "argocd-manager-role" updated
+INFO[0001] ClusterRoleBinding "argocd-manager-role-binding" updated
+Cluster 'https://kubernetes.default.svc' added
+```
 
 
 ## Wdrożenie prostej aplikacji webowej przy użyciu ArgoCD
