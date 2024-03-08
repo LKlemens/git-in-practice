@@ -27,8 +27,8 @@ $ kubectl config get-contexts -o name
 docker-desktop
 ```
 
-Jeśli `docker-desktop` lub `rancher-desktop` nie są widoczne,
-to sprawdźmy poprawność instalacji i konfiguracji Docker Desktop lub Rancher Desktop.
+Jeśli `docker-desktop` lub `rancher-desktop` nie są widoczne, to sprawdźmy poprawność instalacji
+i konfiguracji Docker Desktop lub Rancher Desktop na naszej maszynie.
 
 Jeśli oczekiwany kontekst jest dostępny, to ustawmy go jako domyślny:
 
@@ -186,8 +186,8 @@ zawiera bardziej szczegółowe wskazówki dla innych platform i konfiguracji.
 Sieć wewnętrzna klastra Kubernetesa domyślnie jest kompletnie izolowana od
 sieci hosta, na którym działa klaster. My jednak chcemy aby nasz konsolowy
 klient ArgoCD mógł łączyć się z ArgoCD zainstalowanym w klastrze.
-W tym celu musimy ustawić tzw. _port forwarding_ pomiędzy siecią hosta i
-aplikację w klastrze - najlepiej w osobnej konsoli:
+W tym celu musimy ustawić tzw. _port forwarding_, zwany również
+_tunelowaniem_, pomiędzy siecią hosta i aplikacją w klastrze - najlepiej w osobnej konsoli:
 
 ```sh
 kubectl port-forward svc/argocd-server -n argocd 8080:443
