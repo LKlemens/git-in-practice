@@ -147,7 +147,14 @@ Na platformie Mac klienta linii poleceń zainstalujemy przez:
 brew install argocd
 ```
 
-Na platformie linuksowej najłatwiej będzie pobrać gotową binarkę:
+Prawdopodobnie będziemy też musieli dodać modyfikację zmiennej `PATH` do
+`~/.bash_profile`, po czym zrestartować terminal:
+
+```sh
+echo 'export PATH=/usr/local/Cellar/argocd/2.10.2/bin/:${PATH}' >> ~/.bash_profile
+```
+
+Na platformie Linux najłatwiej będzie pobrać gotową binarkę:
 
 ```sh
 curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
@@ -155,8 +162,8 @@ sudo install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
 rm argocd-linux-amd64
 ```
 
-Alternatywną, polecaną przez nas metodą jest menedżer wersji
-oprogramowania [`asdf`](https://asdf-vm.com/) - niestety jego konfiguracja
+Alternatywną, niezależną od platformy i polecaną przez nas metodą jest instalacja przez
+menedżer wersji oprogramowania [`asdf`](https://asdf-vm.com/) - niestety jego konfiguracja
 wybiega poza zakres tego warsztatu.
 Niemniej jednak instalacja różnych narzędzi przy pomocy `asdf` zwykle sprowadza się do:
 
@@ -166,6 +173,8 @@ asdf list-all argocd
 # tu dostajemy listę dostępnych wersji
 asdf install argocd 2.10.2
 asdf local argocd 2.10.2
+# to ostatnie polecenie "ustawia" wersję polecenia dla danego katalogu / projektu,
+# co jest bardzo wygodne, jeśli często musimy "skakać" pomiędzy projektami... całkiem jak na studiach ;)
 ```
 
 [Instalacja klienta linii poleceń ArgoCD](https://argo-cd.readthedocs.io/en/stable/cli_installation/)
