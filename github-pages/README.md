@@ -7,13 +7,13 @@
 5. dodaj nowy post
    _posts/2024-03-11-my-first-blopost.md
 
-Pliki powinny być w formacie: yyyy-mm-dd-your-blog-post-name.md
+Pliki powinny być w formacie: yyyy-mm-dd-your-blog-post-name.md  
 
-Getting started wiht Markdown
-https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax
+Getting started wiht Markdown  
+https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax  
 
-jekyll themes
-https://github.com/topics/jekyll-themes?o=desc&s=forks
+jekyll themes  
+https://github.com/topics/jekyll-themes?o=desc&s=forks  
 
-templatka na zajęcia
-https://github.com/kitian616/jekyll-TeXt-theme
+templatka na zajęcia  
+https://github.com/kitian616/jekyll-TeXt-theme  
